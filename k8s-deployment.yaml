@@ -2,12 +2,54 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-react-app
+  namespace: resismart-prod  # Ajout du namespace
+  labels:
+    app: my-react-app
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: my-react-app
   template:
+    metadata:
+      labels:
+        app: my-react-app
     spec:
       containers:
         - name: my-react-app
           image: imane1452/my-react-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-react-app
+  namespace: resismart-prod
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-react-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
