@@ -42,7 +42,7 @@ jobs:
           kubectl version --client  # Verify installation
     
 
-      # Étape 7 :onfigurerr kubectlavec le fichier kubeconfig
+      # Étape 7 :onfigurerr kubectlavec le fchier kubeconfig
       - name: Configure kubectl
         run: |
           mkdir -p ~/.kube
