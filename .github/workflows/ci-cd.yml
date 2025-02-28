@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Déclenche le pipeline lors d'un push sur la branche main
+      - master  # Déclenche le pipeline lors d'un push sur la branche main
 
 jobs:
   build-and-deploy:
