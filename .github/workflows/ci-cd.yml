@@ -37,8 +37,8 @@ jobs:
       # Étape 7 : Configurer kubectl avec le fichier kubeconfig
       - name: Configure kubectl
         run: |
-         echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
-         export KUBECONFIG=kubeconfig.yaml
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
 
       # Étape 8 : Déployer sur Kubernetes
       - name: Deploy to Kubernetes
