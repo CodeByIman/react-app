@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 terraform/
 .terraform/
+terraform2/
+terraform1/
