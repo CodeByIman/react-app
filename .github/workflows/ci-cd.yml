@@ -46,14 +46,6 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
-          export KUBECONFIG=~/.kube/config
-          chmod 600 ~/.kube/config
-      # Load Kubernetes certificates
-      - name: certificat kubernet
-        run: |
-          echo "Setting up Kubernetes context with certificates..."
-          mkdir -p ~/.kube
           cp "${{ secrets.KUBECONFIG }} /root/.kube/config
           export KUBECONFIG=/root/.kube/config
           chmod 600 /root/.kube/config
