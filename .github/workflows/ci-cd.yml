@@ -47,6 +47,7 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          echo "${{ secrets.CA_CERTIFICATE }}" | base64 --decode > ~/.kube/ca.crt
           export KUBECONFIG=~/.kube/config
           chmod 600 ~/.kube/config
        # Step 6:Test cluster connection
