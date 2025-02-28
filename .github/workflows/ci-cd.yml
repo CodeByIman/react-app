@@ -26,11 +26,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t imane1452/my-react-app:latest .
 
-      # Étappe 5: Se conneter à Docker Hub
+      # Étae 5: Se conneter à Docker Hub
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      # Étap  : Pousserr limage Docker vers Docker Hub
+      # Étap  : Pousser limage Docker vers Docker Hub
       - name: Push Docker image
         run: docker push imane1452/my-react-app:latest
 
@@ -46,10 +46,9 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir -p ~/.kube
-          cp "${{ secrets.KUBECONFIG }} /root/.kube/config
-          export KUBECONFIG=/root/.kube/config
-          chmod 600 /root/.kube/config
-
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          export KUBECONFIG=~/.kube/config
+          chmod 600 ~/.kube/config
        # Step 6:Test cluster connection
       - name: Test cluster connection
         run: |
