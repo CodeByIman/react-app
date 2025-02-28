@@ -34,7 +34,7 @@ jobs:
       - name: Push Docker image
         run: docker push imane1452/my-react-app:latest
 
-      # Étape 7 : Configurer kubectl avec le fichier kubeconfig
+      # Étape 7 :onfigurer kubectl avec le fichier kubeconfig
       - name: Configure kubectl
         run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig.yaml
