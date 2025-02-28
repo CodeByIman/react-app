@@ -1,0 +1,104 @@
+- name: Setup Kubernetes Cluster
+  hosts: kubernetes
+  become: yes
+  tasks:
+
+    # Étape 1: Vérification et désactivation du swap
+    - name: Disable swap (Kubernetes requirement)
+      command: swapoff -a
+      ignore_errors: yes
+
+    - name: Remove swap entry from /etc/fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: '.*swap.*'
+        state: absent
+
+    # Étape 2: Mise à jour et installation des paquets nécessaires
+    - name: Update system packages
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    # Étape 3: Installation de Docker
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Enable and start Docker service
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    # Étape 4: Installation de Kubernetes (kubeadm, kubelet, kubectl)
+    - name: Add Kubernetes GPG key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add Kubernetes repository
+      apt_repository:
+        repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+        state: present
+
+    - name: Install Kubernetes components
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+        state: started
+
+    # Étape 5: Initialisation du cluster Kubernetes (sur le master)
+    - name: Initialize Kubernetes master
+      command: kubeadm init --pod-network-cidr=10.244.0.0/16
+      when: inventory_hostname == 'master-node'
+
+    # Étape 6: Copie du kubeconfig pour l'utilisateur
+    - name: Copy kubeconfig for kubectl usage
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/adminuser/.kube/config
+        owner: adminuser
+        group: adminuser
+        mode: 0600
+      when: inventory_hostname == 'master-node'
+
+    # Étape 7: Installation d'un réseau CNI (ici, Calico)
+    - name: Install Calico network plugin
+      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+      when: inventory_hostname == 'master-node'
+
+    # Étape 8: Vérification des services Kubernetes
+    - name: Check kubelet status
+      service_facts:
+    
+    - name: Ensure kubelet is running
+      service:
+        name: kubelet
+        state: started
+
+    - name: Reboot the machine
+      reboot:
+        msg: "Rebooting to apply system changes for Kubernetes"
+        pre_reboot_delay: 10
+        post_reboot_delay: 30
+        reboot_timeout: 600
+        test_command: whoami

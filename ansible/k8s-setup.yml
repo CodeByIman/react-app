@@ -1,0 +1,99 @@
+- name: Setup Kubernetes Cluster
+  hosts: kubernetes
+  become: yes
+  tasks:
+
+    - name: Disable swap (Kubernetes requirement)
+      command: swapoff -a
+
+    - name: Remove swap entry from /etc/fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^.*swap.*$'
+        replace: ''
+
+    - name: Update system packages
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+    - name: Add Docker repository
+      shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Enable and start Docker service
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    # Add user to Docker group to avoid permission issues
+    - name: Add user to Docker group
+      user:
+        name: azureuser
+        groups: docker
+        append: yes
+
+    - name: Add Kubernetes GPG key
+      shell: |
+        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo tee /etc/apt/trusted.gpg.d/kubernetes.asc
+
+    - name: Add Kubernetes repository
+      shell: |
+        echo "deb https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+    - name: Update package list
+      apt:
+        update_cache: yes
+
+    - name: Install Kubernetes components
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+
+    # Configure sysctl settings for Kubernetes networking
+    - name: Configure sysctl settings for Kubernetes networking
+      sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: '1'
+        state: present
+        reload: yes
+
+    - name: Configure sysctl settings for IP forwarding
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        state: present
+        reload: yes
+
+    # Reboot to apply kernel changes (optional but recommended)
+    - name: Reboot the machine
+      reboot:
+        msg: "Rebooting to apply system changes for Kubernetes"
+        pre_reboot_delay: 10
+        post_reboot_delay: 30
+        reboot_timeout: 600
+        test_command: whoami
