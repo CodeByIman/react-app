@@ -43,6 +43,5 @@ jobs:
       # Étape 8 : Déployer su Kubernetes
       - name: Deploy to Kubernetes
         run: |
-          kubectl apply -f deployment.yaml --namespace=resismart-prod
-          kubectl apply -f service.yaml --namespace=resismart-prod
+          kubectl apply -f k8s-deployment.yaml --namespace=resismart-prod
           kubectl rollout status deployment/my-react-app --namespace=resismart-prod --timeout=2m
