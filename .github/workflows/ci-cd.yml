@@ -61,7 +61,7 @@ jobs:
           kubectl config view --minify
           kubectl cluster-info
 
-      # Étape  8 :  Déployer su Kubernetes
+      # Étape  8 :  Déployer su Kube,rnetes
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s-deployment.yaml
