@@ -53,13 +53,7 @@ jobs:
 
           export KUBECONFIG=~/.kube/config
           chmod 600 ~/.kube/config
-       # Step 6:Test cluster connection
-      - name: Test cluster connection
-        run: |
-          
-          kubectl get nodes
-          kubectl config view --minify
-          kubectl cluster-info
+       
 
       # Étape  8 :  Déployer su Kubernetes
       - name: Deploy to Kubernetes
