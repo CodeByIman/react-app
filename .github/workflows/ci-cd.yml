@@ -90,7 +90,7 @@ jobs:
           echo "Checking deployment rollout status"
           kubectl rollout status deployment/my-react-app --timeout=2m
 
-      # Étape 12: Vérifier les logs des pods Kubernetes
+      # Étape 12:Vérifier les logs des pods Kubernetes
       - name: Get Pod Logs for Debugging
         run: |
           set -e
