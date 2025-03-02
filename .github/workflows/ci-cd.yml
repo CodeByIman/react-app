@@ -59,7 +59,7 @@ jobs:
           kubectl config view  # View the loaded config for debugging
           kubectl get nodes  # Test if nodes are accessible
 
-      # Étape 8 : Déployer su Kubernetes
+      # Étape 8 :  Déployer su Kubernetes
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s-deployment.yaml
