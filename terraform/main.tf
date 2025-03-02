@@ -5,7 +5,7 @@ provider "azurerm" {
 
 # Définition du groupe de ressources
 resource "azurerm_resource_group" "devops_rg" {
-  name     = "DevOpsResourceGroup"
+  name     = "DevOpResourceGroup"
   location = "North Europe"  
 }
 
