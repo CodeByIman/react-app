@@ -42,14 +42,15 @@ jobs:
           kubectl version --client  # Verify installation
     
 
-      # Étape 7 :onfigurerr kubectlavec le fchier kubeconfig
+      # Étape 7 :onfigurerr   kubectlavec le fchier kubeconfig
       - name: Configure kubectl
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > /root/.kube/config
-          export KUBECONFIG=/root/.kube/config
-          chmod 600 /root/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
           
+
+          export KUBECONFIG=~/.kube/config
+          chmod 600 ~/.kube/config
        # Step 6:Test cluster connection
       - name: Test cluster connection
         run: |
