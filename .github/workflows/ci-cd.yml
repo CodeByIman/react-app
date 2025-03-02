@@ -42,7 +42,7 @@ jobs:
           kubectl version --client  # Verify installation
     
 
-      # Étape 7 :onfigurerr   kubectlavec le fchier kubeconfig
+      # Étape 7 :onfigurerr kubectlavec le fchier kubeconfig
       - name: Configure kubectl
         run: |
           mkdir -p ~/.kube
@@ -54,9 +54,8 @@ jobs:
        # Step 6:Test cluster connection
       - name: Test cluster connection
         run: |
-          
-          kubectl get nodes
           kubectl config view --minify
+          kubectl get nodes
           kubectl cluster-info
 
       # Étape  8 :  Déployer su Kube,rnetes
