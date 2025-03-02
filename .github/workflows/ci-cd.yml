@@ -51,7 +51,7 @@ jobs:
 
           export KUBECONFIG=~/.kube/config
           chmod 600 ~/.kube/config
-       # Step 6:Test cluster connection
+       #  Step 6:Test cluster connection
       - name: Test cluster connection
         run: |
           kubectl config view --minify
