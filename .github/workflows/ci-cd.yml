@@ -65,7 +65,7 @@ jobs:
         run: |
           kubectl apply -f k8s-deployment.yaml
           kubectl apply -f service.yaml
-          kubectl rollout status deployment/my-react-app --namespace=resismart-prod --timeout=2m
+          kubectl rollout status deployment/my-react-app --timeout=2m
       # Step 8: Check deployment status
       - name: Check deployment status
         run: |
