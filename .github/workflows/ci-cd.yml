@@ -69,4 +69,5 @@ jobs:
       # Step 8: Check deployment status
       - name: Check deployment status
         run: |
+          kubectl rollout restart deployment my-react-app
           kubectl rollout status deployment/my-react-app --timeout=2m
