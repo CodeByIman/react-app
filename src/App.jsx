@@ -28,7 +28,7 @@ function App() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
-          Cette application est une simple démo pour tester l'intégration et le déploiement dans un environnement cloud Azure.
+          hello world
         </motion.p>
         <motion.button
           className="mt-6 px-6 py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-red-500 text-white text-lg font-semibold shadow-lg hover:scale-110 transition-all"
