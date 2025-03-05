@@ -20,7 +20,7 @@ function App() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          🌟 test projet 🌟
+          🌟 test projet dovops🌟
         </motion.h1>
         <motion.p 
           className="text-lg text-gray-800 mt-4"
